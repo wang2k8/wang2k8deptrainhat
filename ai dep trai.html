@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ai Là Người Đẹp Hơn?</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #001f3f; /* Màu nền */
+            color: #ffffff; /* Màu chữ trắng */
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+        }
+        .button {
+            background-color: #0074D9; /* Màu nút */
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transition: transform 0.2s, background-color 0.2s;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+        }
+        .button:hover {
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+        }
+        h1 {
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+        }
+        .bubble {
+            display: none;
+            position: absolute;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            padding: 5px 10px;
+            animation: bubble 2s forwards;
+            pointer-events: none; 
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+        }
+        @keyframes bubble {
+            opacity: 1;
+            transform: translateY(-20px);
+        }
+    </style>
+</head>
+<body>
+    <div id="inputArea">
+        <input type="text" id="name1" placeholder="Nhập tên người 1">
+        <input type="text" id="name2" placeholder="Nhập tên người 2">
+        <button onclick="submitNames()">Xác nhận</button>
+    </div>
+
+    <div id="questionArea" style="display: none;">
+        <h1>Ai là người đẹp hơn?</h1>
+        <button id="button1" class="button" onclick="openVideo()"></button>
+        <button id="button2" class="button" onmouseover="moveButton2()" style="display: none;"></button>
+        <div id="bubble" class="bubble"></div>
+    </div>
+
+    <script>
+        let name1, name2;
+        let moveCount = 0;
+
+        function submitNames() {
+            name1 = document.getElementById('name1').value;
+            name2 = document.getElementById('name2').value;
+
+            if (name1 && name2) {
+                document.getElementById('inputArea').style.display = 'none';
+                document.getElementById('questionArea').style.display = 'block';
+                document.getElementById('button1').innerText = name1;
+                document.getElementById('button2').innerText = name2;
+                document.getElementById('button2').style.display = 'inline-block';
+            } else {
+                alert('Vui lòng nhập cả hai tên!');
+            }
+        }
+
+        function openVideo() {
+            window.open('https://www.youtube.com/watch?v=xvFZjo5PgG0', '_blank');
+        }
+
+        function moveButton2() {
+            moveCount++;
+            const button2 = document.getElementById('button2');
+
+            // Tính toán vị trí ngẫu nhiên cho button 2
+            const randomX = Math.random() * window.innerWidth;
+            const randomY = Math.random() * window.innerHeight;
+
+            button2.style.position = 'absolute';
+            button2.style.left = randomX + 'px';
+            button2.style.top = randomY + 'px';
+
+            if (moveCount <= 10) {
+                button2.style.backgroundColor = 'yellow';
+                if (moveCount % 2 === 0) {
+                    createButton1(); // Nhân đôi nút 1
+                }
+            } else if (moveCount <= 20) {
+                button2.style.backgroundColor = 'orange';
+                button1.style.transform = 'scale(1.5)'; // Phóng to nút 1
+            } else if (moveCount <= 30) {
+                button2.style.backgroundColor = 'red';
+                createMultipleButtons(); // Tạo ra 18 nút 1
+            }
+
+            button2.addEventListener('click', showBubble);
+        }
+
+        function showBubble(event) {
+            const bubble = document.getElementById('bubble');
+            bubble.innerText = 'Không thể chạm vào!';
+            bubble.style.left = event.pageX + 'px';
+            bubble.style.top = event.pageY + 'px';
+            bubble.style.display = 'block';
+            setTimeout(() => {
+                bubble.style.display = 'none';
+            }, 2000);
+        }
+
+        function createButton1() {
+            const button1 = document.createElement('button');
+            button1.className = 'button';
+            button1.innerText = name1;
+            button1.style.position = 'absolute';
+            button1.style.left = Math.random() * window.innerWidth + 'px';
+            button1.style.top = Math.random() * window.innerHeight + 'px';
+            button1.onclick = openVideo;
+            document.body.appendChild(button1);
+        }
+
+        function createMultipleButtons() {
+            for (let i = 0; i < 18; i++) {
+                createButton1();
+            }
+        }
+    </script>
+</body>
+</html>
